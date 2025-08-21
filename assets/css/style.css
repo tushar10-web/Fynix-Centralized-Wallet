@@ -24,7 +24,7 @@
   align-items: center;
   z-index: 9999;
   animation: fadeOut 1s ease forwards;
-  animation-delay: 1.15s; /* keeps it visible for 3 seconds before fading */
+  animation-delay: 2.25s; /* keeps it visible for 3 seconds before fading */
 }
 
 .intro-logo {
@@ -1257,3 +1257,4 @@ address.footer-contact-link { max-width: 30ch; }
   .footer-brand { grid-column: auto; }
 
 }
+
