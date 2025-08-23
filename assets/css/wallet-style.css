@@ -1,0 +1,79 @@
+body {
+  background-color: #181c24;
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  color: white;
+}
+
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+h1, h2, h3 {
+  color: #30e7ff;
+  margin-bottom: 20px;
+}
+
+.card {
+  background-color: #232947;
+  border-radius: 16px;
+  box-shadow: 0 6px 32px rgba(0, 0, 0, 0.15);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+#wallet-balance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#balance-amount {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #30e7ff;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 24px;
+}
+
+.actions button {
+  background-color: #2143e7;
+  border: none;
+  color: white;
+  padding: 12px 32px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.actions button:hover {
+  background-color: #30e7ff;
+  color: #232947;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: white;
+}
+
+th, td {
+  padding: 12px 10px;
+  text-align: left;
+  border-bottom: 1px solid #394264;
+}
+
+th {
+  background-color: #1f243b;
+}
+
+tbody tr:hover {
+  background-color: #394264;
+}
