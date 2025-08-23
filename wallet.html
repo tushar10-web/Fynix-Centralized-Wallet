@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fynix Wallet Dashboard</title>
+  <link rel="stylesheet" href="./assets/css/wallet-style.css" />
+  <style>
+    /* Example button style for uniformity */
+    .btn {
+      padding: 8px 16px;
+      margin: 0 4px 8px 0;
+      font-size: 1rem;
+      border: 1px solid #007BFF;
+      background-color: #fff;
+      color: #007BFF;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .btn:hover {
+      background-color: #007BFF;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Fynix Wallet Dashboard</h1>
+
+    <!-- Wallet Balance Section -->
+    <div class="card" id="wallet-balance">
+      <h2>Wallet Balance</h2>
+      <span id="balance-amount">₹--</span>
+    </div>
+
+    <!-- Create Wallet Button (visible for testing) -->
+    <div class="card" id="create-wallet-section" style="margin: 1em 0;">
+      <button id="create-wallet-btn" class="btn">Create Wallet</button>
+    </div>
+
+    <!-- Action Buttons (visible for testing) -->
+    <div class="actions card" id="action-buttons">
+      <button id="login-btn" class="btn">Login to Wallet</button>
+      <button id="deposit-btn" class="btn">Deposit</button>
+      <!-- Withdraw button removed as requested -->
+      <button id="send-btn" class="btn">Send</button>
+      <button id="receive-btn" class="btn">Receive</button>
+    </div>
+
+    <!-- Transaction History (visible for testing) -->
+    <div class="card" id="transactions">
+      <h3>Recent Transactions</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="transaction-list">
+          <!-- Dynamic rows here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "http://localhost:3000/api";
+
+    // Example handler for login button, customize as needed
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('login-btn').addEventListener('click', () => {
+        alert('Login to wallet functionality is not implemented yet!');
+        // You can add actual login logic or redirect here
+      });
+    });
+
+    async function fetchBalance() {
+      try {
+        const res = await fetch(`${API_BASE}/balance`, { credentials: 'include' });
+        console.log("Balance API response status:", res.status);
+
+        if (res.status === 404) {
+          console.log("Wallet not found");
+          document.getElementById('balance-amount').textContent = 'No wallet found.';
+          document.getElementById('create-wallet-section').style.display = 'block';
+          document.getElementById('action-buttons').style.display = 'none';
+          document.getElementById('transactions').style.display = 'none';
+          return null;
+        }
+        const data = await res.json();
+        if (res.ok) {
+          console.log("Wallet found, balance:", data.balance);
+          document.getElementById("balance-amount").textContent = `₹${parseFloat(data.balance).toFixed(2)}`;
+          document.getElementById('create-wallet-section').style.display = 'none';
+          document.getElementById('action-buttons').style.display = 'block';
+          document.getElementById('transactions').style.display = 'block';
+          return true;
+        } else {
+          console.error("Failed to fetch balance", data.message);
+        }
+      } catch (err) {
+        console.error("Error fetching balance:", err);
+      }
+      return null;
+    }
+
+    async function fetchTransactions() {
+      try {
+        const res = await fetch(`${API_BASE}/transactions`, { credentials: 'include' });
+        const data = await res.json();
+        if (res.ok) {
+          const tbody = document.getElementById("transaction-list");
+          tbody.innerHTML = ""; // Clear existing rows
+
+          data.transactions.forEach(tx => {
+            const tr = document.createElement("tr");
+
+            const tdDate = document.createElement("td");
+            tdDate.textContent = new Date(tx.date).toLocaleDateString();
+
+            const tdType = document.createElement("td");
+            tdType.textContent = tx.type;
+
+            const tdAmount = document.createElement("td");
+            tdAmount.textContent = `₹${parseFloat(tx.amount).toFixed(2)}`;
+
+            const tdStatus = document.createElement("td");
+            tdStatus.textContent = tx.status;
+
+            tr.appendChild(tdDate);
+            tr.appendChild(tdType);
+            tr.appendChild(tdAmount);
+            tr.appendChild(tdStatus);
+
+            tbody.appendChild(tr);
+          });
+        } else {
+          console.error("Failed to fetch transactions", data.message);
+        }
+      } catch (err) {
+        console.error("Error fetching transactions:", err);
+      }
+    }
+
+    async function createWallet() {
+      try {
+        const res = await fetch(`${API_BASE}/wallet`, { method: 'POST', credentials: 'include' });
+        if (!res.ok) {
+          const errorData = await res.json();
+          alert('Failed to create wallet: ' + (errorData.message || 'Unknown error'));
+          return;
+        }
+        alert('Wallet created successfully!');
+        await initializeDashboard();
+      } catch (err) {
+        alert('Error creating wallet: ' + err.message);
+      }
+    }
+
+    async function initializeDashboard() {
+      const walletExists = await fetchBalance();
+      if (walletExists) {
+        fetchTransactions();
+      }
+    }
+
+    window.onload = () => {
+      initializeDashboard();
+      document.getElementById('create-wallet-btn').addEventListener('click', createWallet);
+    };
+  </script>
+</body>
+</html>
