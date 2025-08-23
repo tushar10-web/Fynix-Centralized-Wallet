@@ -77,3 +77,230 @@ th {
 tbody tr:hover {
   background-color: #394264;
 }
+/* Create Wallet Button - bottom right, clean look */
+.fynix-btn {
+  padding: 14px 32px;
+  background-color: #0d6efd; /* Fynix blue */
+  border: none;
+  border-radius: 30px;
+  color: white;
+  font-weight: 700;
+  font-size: 17px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 1001;
+  box-shadow: 0 8px 15px rgba(13, 110, 253, 0.4);
+}
+
+.fynix-btn:hover {
+  background-color: #0b5ed7;
+  box-shadow: 0 12px 22px rgba(11, 94, 215, 0.6);
+}
+
+/* Modal backdrop */
+.fynix-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  animation: fadeInBG 0.4s ease forwards;
+}
+
+@keyframes fadeInBG {
+  from {background: rgba(0,0,0,0);}
+  to {background: rgba(0,0,0,0.5);}
+}
+
+/* Modal content container */
+.fynix-modal-content {
+  background: #f8f9fa; /* light soft gray */
+  padding: 28px 40px;
+  border-radius: 16px;
+  width: 360px;
+  max-width: 95%;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+  position: relative;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+  animation: scaleFadeIn 0.35s ease forwards;
+}
+
+@keyframes scaleFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Close button in top right */
+.fynix-close {
+  position: absolute;
+  right: 18px;
+  top: 15px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.fynix-close:hover {
+  color: #0d6efd;
+}
+
+/* Modal title */
+.fynix-modal-content h2 {
+  margin-bottom: 26px;
+  font-weight: 700;
+  font-size: 1.9rem;
+  color: #222;
+}
+
+/* Labels */
+form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  text-align: left;
+  color: #444;
+}
+
+/* Input fields */
+form input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  border-radius: 12px;
+  border: 1.6px solid #ddd;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline-offset: 3px;
+}
+
+form input::placeholder {
+  color: #b4b4b4;
+  font-style: italic;
+}
+
+form input:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 14px rgba(13,110,253,0.4);
+  outline: none;
+}
+
+/* Submit button in modal */
+.fynix-btn-submit {
+  margin-top: 32px;
+  width: 100%;
+  background: linear-gradient(135deg, #0d6efd 0%, #3a8dff 100%);
+  box-shadow: 0 8px 25px rgba(13, 110, 253, 0.5);
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 30px;
+  padding: 14px 0;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.35s ease, box-shadow 0.35s ease;
+}
+
+.fynix-btn-submit:hover:not(:disabled) {
+  background: linear-gradient(135deg, #0b5ed7 0%, #2172ff 100%);
+  box-shadow: 0 12px 40px rgba(11, 94, 215, 0.7);
+}
+
+.fynix-btn-submit:disabled {
+  background: #a6c1ff;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* Feedback message text */
+#formMessage {
+  margin-top: 18px;
+  font-weight: 700;
+  min-height: 28px;
+  color: #222;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+/* Container holding the buttons at top-right */
+.fixed-action-btn {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  display: flex;
+  gap: 12px; /* space between buttons */
+  z-index: 1100;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Style for both buttons with green color */
+.fixed-action-btn button {
+  background-color: #198754; /* Bootstrap green */
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 32px;
+  font-weight: 700;
+  font-size: 17px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: none;
+  min-width: 140px;
+}
+
+.fixed-action-btn button:hover {
+  background-color: #146c43; /* darker green on hover */
+}
+.btn-register {
+  margin-top: 28px;  /* keep spacing above */
+  margin-bottom: 0;  /* remove space below */
+  width: 100%;
+  background: #0d6efd;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 30px;
+  padding: 16px 0;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  transition: background-color 0.35s ease;
+  box-shadow: none;
+}
+button.btn-login-modal {
+  margin-top: 28px;  /* keep spacing above */
+  margin-bottom: 0;  /* remove space below */
+  width: 100%;
+  padding: 16px 0;
+  font-weight: 700;
+  font-size: 18px;
+  border-radius: 30px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease, filter 0.3s ease;
+  color: #fff;
+  background: linear-gradient(90deg, #0d6efd 0%, #0056b3 100%);
+  user-select: none;
+}
+
+button.btn-login-modal:hover:not(:disabled) {
+  background: linear-gradient(90deg, #0056b3 0%, #0d6efd 100%);
+  filter: brightness(1.1);
+}
+
+button.btn-login-modal:disabled {
+  background: #a6c1ff;
+  cursor: not-allowed;
+}
