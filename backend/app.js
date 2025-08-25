@@ -6,6 +6,9 @@ const User = require('./User');
 const Transaction = require('./Transaction');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const session = require('express-session');
+const pgSession = require('connect-pg-simple')(session);
+
 const { v4: uuidv4 } = require('uuid');
 const cors = require('cors');
 
@@ -39,6 +42,9 @@ app.get('/', (req, res) => {
 
 // User signup
 app.post('/signup', async (req, res) => {
+  email = email.trim().toLowerCase();
+  password = password.trim();
+
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
 
@@ -56,22 +62,31 @@ app.post('/signup', async (req, res) => {
 
 // User login
 app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
+  let { email, password } = req.body;
+  email = email.trim().toLowerCase();
+  password = password.trim();
+
+  if (!email || !password)
+    return res.status(400).json({ error: 'Email and password required' });
 
   try {
     const user = await User.findOne({ where: { email } });
-    if (!user) return res.status(400).json({ error: 'Invalid credentials' });
+    if (!user)
+      return res.status(400).json({ error: 'Invalid credentials' });
 
     const validPass = await bcrypt.compare(password, user.password);
-    if (!validPass) return res.status(400).json({ error: 'Invalid credentials' });
+    if (!validPass)
+      return res.status(400).json({ error: 'Invalid credentials' });
 
     const token = jwt.sign({ user_id: user.user_id, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
     res.json({ token });
   } catch (err) {
+    console.error('Login error:', err);
     res.status(500).json({ error: 'Login failed' });
   }
 });
+
+
 
 /* Protected Wallet Routes Below - Use authenticateToken middleware */
 
@@ -190,6 +205,19 @@ app.delete('/wallets/:walletId', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Failed to delete wallet' });
   }
 });
+app.use(session({
+  store: new pgSession({
+    pool: sequelize.connectionManager.pool, // Reuse Sequelize's pool
+    tableName: 'session',                    // Optional: customize session table name
+  }),
+  secret: 'c4e9f3d6a2b84f7d9e5c1b7a3d9f8e7c0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d',      // Replace with a secure secret; can use JWT secret
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000,             // 1 day session expiry (optional)
+    secure: false,                            // Set true if using HTTPS
+  },
+}));
 
 // Transfer balance between wallets
 app.post('/wallets/transfer', authenticateToken, async (req, res) => {
