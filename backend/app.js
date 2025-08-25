@@ -21,6 +21,20 @@ const JWT_SECRET = 'c4e9f3d6a2b84f7d9e5c1b7a3d9f8e7c0a1b2c3d4e5f6a7b8c9d0e1f2a3b
 // Model associations
 Wallet.hasMany(Transaction, { foreignKey: 'wallet_id' });
 Transaction.belongsTo(Wallet, { foreignKey: 'wallet_id' });
+// pg-create
+app.use(session({
+  store: new pgSession({
+    pool: sequelize.connectionManager.pool, // Reuse Sequelize's pool
+    tableName: 'session',                    // Optional: customize session table name
+  }),
+  secret: 'c4e9f3d6a2b84f7d9e5c1b7a3d9f8e7c0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d',      // Replace with a secure secret; can use JWT secret
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000,             // 1 day session expiry (optional)
+    secure: false,                            // Set true if using HTTPS
+  },
+}));
 
 // JWT Authentication middleware
 const authenticateToken = (req, res, next) => {
@@ -205,19 +219,6 @@ app.delete('/wallets/:walletId', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Failed to delete wallet' });
   }
 });
-app.use(session({
-  store: new pgSession({
-    pool: sequelize.connectionManager.pool, // Reuse Sequelize's pool
-    tableName: 'session',                    // Optional: customize session table name
-  }),
-  secret: 'c4e9f3d6a2b84f7d9e5c1b7a3d9f8e7c0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d',      // Replace with a secure secret; can use JWT secret
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 24 * 60 * 60 * 1000,             // 1 day session expiry (optional)
-    secure: false,                            // Set true if using HTTPS
-  },
-}));
 
 // Transfer balance between wallets
 app.post('/wallets/transfer', authenticateToken, async (req, res) => {
