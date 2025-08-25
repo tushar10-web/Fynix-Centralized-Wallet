@@ -2,8 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const sequelize = require('./models/db'); // Your Sequelize instance
-const PORT = 3000;
-
+const PORT = process.env.PORT || 3000;
 // Import your API routes
 const apiRoutes = require('./api');
 
@@ -41,7 +40,7 @@ sequelize.sync()
   .then(() => {
     console.log('Database synced');
    app.listen(PORT, '0.0.0.0', () => {
-      console.log(`Server running on http://192.168.1.2:${PORT}`);
+      console.log(`Server running on port ${PORT}`);
 });
 
   })
@@ -56,5 +55,6 @@ sequelize.sync()
 
 
 module.exports = app;
+
 
 
